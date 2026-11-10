@@ -194,6 +194,35 @@ try {
   check('开始后 running', running.state === 'running', running.state);
   check('开始后 overlay 隐藏', (await evaluate('document.querySelector("#overlay").hidden')) === true);
 
+  const beforeTurn = await evaluate('JSON.stringify(window.__snakeGame.snapshot().snake[0])');
+  const turnAccepted = await evaluate('window.__snakeGame.turn(0, -1)');
+  await sleep(240);
+  const turnState = await evaluate('window.__snakeGame.snapshot()');
+  check('方向改变被接受并生效', turnAccepted === true && turnState.direction.x === 0 && turnState.direction.y === -1, JSON.stringify(turnState.direction));
+  check('转向后蛇头位置变化', JSON.stringify(turnState.snake[0]) !== beforeTurn, `${beforeTurn} -> ${JSON.stringify(turnState.snake[0])}`);
+
+  await evaluate(`(() => {
+    const game = window.__snakeGame.game;
+    const head = game.snake[0];
+    const direction = game.direction;
+    game.food = { x: head.x + direction.x, y: head.y + direction.y };
+    return true;
+  })()`);
+  await sleep(240);
+  const foodState = await evaluate(`(() => {
+    const game = window.__snakeGame.game;
+    return {
+      score: game.score,
+      length: game.snake.length,
+      food: game.food,
+      onSnake: game.snake.some((segment) => segment.x === game.food.x && segment.y === game.food.y),
+    };
+  })()`);
+  check('吃食物得分 +10 且蛇身增长', foodState.score === 10 && foodState.length === 4, JSON.stringify(foodState));
+  check('食物不落在蛇身', foodState.onSnake === false, JSON.stringify(foodState));
+  check('最高分同步更新', (await evaluate('window.__snakeGame.getHighScore()')) === 10);
+  check('最高分写入 localStorage', (await evaluate('localStorage.getItem("snake.highScore")')) === '10');
+
   await evaluate('window.__snakeGame.pause()');
   const paused = await evaluate('window.__snakeGame.snapshot()');
   const pausedView = await evaluate('({hidden:document.querySelector("#overlay").hidden,kicker:document.querySelector("#overlay-kicker").textContent,title:document.querySelector("#overlay-title").textContent,action:document.querySelector("#overlay-action").textContent})');
@@ -209,6 +238,7 @@ try {
 
   await evaluate('window.__snakeGame.restart()');
   check('重开后分数归零', (await evaluate('window.__snakeGame.snapshot().score')) === 0);
+  check('重开后最高分保留', (await evaluate('window.__snakeGame.getHighScore()')) === 10);
   check('重开后焦点在 canvas', (await evaluate('document.activeElement?.id')) === 'game-canvas');
 
   const overState = await evaluate(`(() => {

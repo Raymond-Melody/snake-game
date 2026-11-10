@@ -96,7 +96,7 @@ if (packageText.includes('"test": "node --test tests/game.test.mjs"')) pass('pac
 else fail('package.json 缺少测试脚本');
 if (packageText.includes('"typecheck": "node scripts/typecheck.mjs"')) pass('package.json 声明 typecheck 脚本');
 else fail('package.json 缺少 typecheck 脚本');
-if (packageText.includes('"test:e2e": "node scripts/e2e.mjs"')) pass('package.json 声明 E2E 脚本');
+if (packageText.includes('"test:e2e": "node scripts/e2e.mjs && node scripts/http-check.mjs"')) pass('package.json 声明 E2E 脚本');
 else fail('package.json 缺少 E2E 脚本');
 if (packageText.includes('"test:http": "node scripts/http-check.mjs"')) pass('package.json 声明 HTTP 安全检查脚本');
 else fail('package.json 缺少 HTTP 安全检查脚本');

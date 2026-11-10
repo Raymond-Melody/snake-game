@@ -10,7 +10,7 @@
     "typecheck": "node scripts/typecheck.mjs",
     "test": "node --test tests/game.test.mjs",
     "test:http": "node scripts/http-check.mjs",
-    "test:e2e": "node scripts/e2e.mjs",
+    "test:e2e": "node scripts/e2e.mjs && node scripts/http-check.mjs",
     "build": "node scripts/build.mjs"
   },
   "engines": {
