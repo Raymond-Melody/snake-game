@@ -18,6 +18,18 @@ function check(name, condition, detail = '') {
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+async function stopServer(child) {
+  if (!child || child.exitCode !== null) return;
+  await new Promise((resolve) => {
+    const timer = setTimeout(resolve, 1000);
+    child.once('exit', () => {
+      clearTimeout(timer);
+      resolve();
+    });
+    child.kill();
+  });
+}
+
 async function waitForServer() {
   for (let attempt = 0; attempt < 50; attempt += 1) {
     try {
@@ -84,7 +96,7 @@ try {
   failures.push({ name: 'runtime', detail: error.message });
   console.error(`[http-check] ${error.message}`);
 } finally {
-  server.kill();
+  await stopServer(server);
 }
 
-process.exit(failures.length === 0 ? 0 : 1);
+process.exitCode = failures.length === 0 ? 0 : 1;
