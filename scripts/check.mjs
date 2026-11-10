@@ -60,6 +60,9 @@ if (html.includes('aria-live="polite"') && html.includes('aria-label="方向控�
 else fail('缺少 aria-live、方向控制标签或 group 角色');
 if (css.includes('@media (max-width: 640px)') && css.includes('prefers-reduced-motion')) pass('包含移动端与减少动效样式');
 else fail('缺少移动端或减少动效样式');
+const screens = read('docs/design/screens.md');
+if (css.includes('@media (max-width: 640px)') && css.includes('@media (max-width: 359px)') && screens.includes('360–640px') && screens.includes('≤ 359px')) pass('设计文档与 CSS 响应式阈值一致');
+else fail('设计文档与 CSS 响应式阈值不一致');
 if (mainJs.includes('prefers-reduced-motion')) pass('Canvas 动效遵循减少动效偏好');
 else fail('Canvas 动效未考虑减少动效偏好');
 if (mainJs.includes("has('e2e')")) pass('测试钩子仅在 e2e 模式暴露');
@@ -100,6 +103,14 @@ if (packageText.includes('"test:e2e": "node scripts/e2e.mjs && node scripts/http
 else fail('package.json 缺少 E2E 脚本');
 if (packageText.includes('"test:http": "node scripts/http-check.mjs"')) pass('package.json 声明 HTTP 安全检查脚本');
 else fail('package.json 缺少 HTTP 安全检查脚本');
+
+const distDir = path.join(root, 'dist');
+if (existsSync(distDir)) {
+  if (!existsSync(path.join(distDir, 'README.md'))) pass('dist 不含 README');
+  else fail('dist 不应包含 README');
+} else {
+  pass('dist 尚未生成（build 后检查）');
+}
 
 if (failures.length > 0) {
   console.error(`\n[check] ${failures.length} 项失败`);

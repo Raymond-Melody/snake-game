@@ -22,12 +22,22 @@ npm start
 ## 验证
 
 ```bash
-npm run lint    # 静态检查：文件、外链、语法、可访问性标记
-npm test        # 16 个纯逻辑单测
-npm run build   # 生成 dist/ 静态产物
+npm run lint      # 静态检查：文件、外链、语法、可访问性标记
+npm run typecheck # 全部 JS/MJS 的 Node 语法门禁
+npm test          # 16 个纯逻辑单测
+npm run build     # 生成 dist/ 静态产物
+npm run test:http # 真实服务器：CSP、安全头、白名单、404/405、目录穿越
+npm run test:e2e  # 零依赖 CDP 浏览器 E2E + HTTP 安全检查
 ```
 
-浏览器 E2E 使用 Playwright 验证主路径、暂停、吃食物、碰撞、重开、移动端与无控制台错误，结果见 `.team/verification/VER-001.md`。
+E2E 使用本机 Edge/Chrome 的 CDP（Node 内置 WebSocket，不引入 Playwright 依赖），覆盖主路径、吃食物、碰撞、暂停、重开/焦点、最高分、控制台/网络，以及 1280/768/360 视口。结果见 `.team/verification/VER-002.md`、`.team/evidence/e2e-summary.json` 和 `e2e-360.png`。
+
+团队验证器：
+
+```bash
+node ../web-fullstack-team/skills/web-fullstack-team/scripts/run-verification.mjs \
+  --root . --require lint,typecheck,test,build,e2e
+```
 
 ## 结构
 
@@ -38,6 +48,9 @@ src/game.js         SnakeGame 纯逻辑（状态机、碰撞、食物、计分�
 src/main.js         Canvas 渲染、键盘/触摸、计时器、最高分
 tests/game.test.mjs 逻辑单测
 scripts/check.mjs   静态检查
+scripts/typecheck.mjs JS/MJS 语法门禁
+scripts/http-check.mjs 服务器安全与白名单检查
+scripts/e2e.mjs     零依赖 CDP 浏览器 E2E
 scripts/build.mjs   生成 dist/
 scripts/serve.mjs   本地静态服务器（防目录穿越）
 ```

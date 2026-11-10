@@ -8,11 +8,16 @@ const dist = path.join(root, 'dist');
 rmSync(dist, { recursive: true, force: true });
 mkdirSync(dist, { recursive: true });
 
-for (const file of ['index.html', 'styles.css', 'README.md']) {
+for (const file of ['index.html', 'styles.css']) {
   const source = path.join(root, file);
   if (existsSync(source)) cpSync(source, path.join(dist, file));
 }
 cpSync(path.join(root, 'src'), path.join(dist, 'src'), { recursive: true });
+
+if (existsSync(path.join(dist, 'README.md'))) {
+  console.error('[build] dist/ 不应包含 README.md');
+  process.exit(1);
+}
 
 const expected = ['index.html', 'styles.css', 'src/game.js', 'src/main.js'];
 for (const file of expected) {
