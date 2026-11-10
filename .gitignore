@@ -1,0 +1,13 @@
+# Build output
+dist/
+
+# Internal team ledger and evidence
+.team/
+
+# Local tooling
+node_modules/
+.playwright-mcp/
+
+# OS/editor noise
+.DS_Store
+Thumbs.db

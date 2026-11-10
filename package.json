@@ -1,0 +1,19 @@
+{
+  "name": "snake-game",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Zero-dependency Snake game built with vanilla JavaScript and Canvas.",
+  "scripts": {
+    "start": "node scripts/serve.mjs",
+    "lint": "node scripts/check.mjs",
+    "typecheck": "node scripts/typecheck.mjs",
+    "test": "node --test tests/game.test.mjs",
+    "test:http": "node scripts/http-check.mjs",
+    "test:e2e": "node scripts/e2e.mjs",
+    "build": "node scripts/build.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

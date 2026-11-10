@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#060913" />
+    <meta name="description" content="一个零依赖、键盘与移动端都能玩的贪食蛇小游戏。" />
+    <title>贪食蛇 · SNAKE</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">ARCADE / 01</p>
+          <h1>SNAKE <span>// 贪食蛇</span></h1>
+        </div>
+        <div class="status-pill" aria-hidden="true">
+          <span class="dot"></span>
+          <span>单机模式</span>
+        </div>
+      </header>
+
+      <section class="scoreboard" aria-label="计分板">
+        <div class="stat">
+          <span class="stat-label">当前得分</span>
+          <strong id="score">000</strong>
+        </div>
+        <div class="stat">
+          <span class="stat-label">最高分</span>
+          <strong id="high-score">000</strong>
+        </div>
+        <div class="stat">
+          <span class="stat-label">状态</span>
+          <strong id="game-state">准备</strong>
+        </div>
+      </section>
+
+      <section class="stage">
+        <div class="board-wrap">
+          <canvas
+            id="game-canvas"
+            width="600"
+            height="600"
+            tabindex="0"
+            aria-label="贪食蛇棋盘，20乘20网格，使用方向键或 WASD 控制蛇移动"
+          ></canvas>
+          <div class="overlay" id="overlay">
+            <p class="overlay-kicker" id="overlay-kicker">INSERT COIN</p>
+            <h2 id="overlay-title">贪食蛇</h2>
+            <p id="overlay-text">方向键 / WASD 移动 · 空格暂停</p>
+            <button class="btn btn-primary" id="overlay-action" type="button">开始游戏</button>
+          </div>
+        </div>
+
+        <div class="controls">
+          <div class="button-row">
+            <button class="btn btn-ghost" id="pause-button" type="button" disabled>暂停</button>
+            <button class="btn btn-ghost" id="restart-button" type="button">重新开始</button>
+          </div>
+          <div class="dpad" id="dpad" role="group" aria-label="方向控制">
+            <button class="dpad-btn up" data-direction="up" type="button" aria-label="向上">↑</button>
+            <button class="dpad-btn left" data-direction="left" type="button" aria-label="向左">←</button>
+            <button class="dpad-btn down" data-direction="down" type="button" aria-label="向下">↓</button>
+            <button class="dpad-btn right" data-direction="right" type="button" aria-label="向右">→</button>
+          </div>
+        </div>
+
+        <p class="hint">方向键 / WASD 转向 · 空格暂停 · 手机可滑动棋盘或点方向键</p>
+      </section>
+
+      <footer class="footer">
+        <span>NO EXTERNAL ASSETS</span>
+        <span>LOCAL HIGH SCORE</span>
+      </footer>
+
+      <p id="live-status" class="sr-only" aria-live="polite">准备开始</p>
+    </main>
+    <noscript><p class="noscript">需要启用 JavaScript 才能游玩。</p></noscript>
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>
